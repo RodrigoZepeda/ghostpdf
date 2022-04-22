@@ -106,7 +106,7 @@ reduced_size <- file.info("All_pdfs_subset.pdf")["size"]
 #in this case there isn't much to gain because the pdf was small by itself
 #in large pdfs this is useful
 message(paste0("Shrank pdf from ", original_size, " to ", reduced_size))
-#> Shrank pdf from 29571 to 27388
+#> Shrank pdf from 29518 to 27350
 ```
 
 ### PDF to image
@@ -159,8 +159,15 @@ pdf_decrypt("Example1.pdf", password = "mypassword")
 I would like to eventually add same functionality for eps files and to
 transform between images and image to pdf.
 
-    #> [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
-    #> [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
-    #> [1] TRUE TRUE TRUE TRUE
-    #> [1] TRUE TRUE TRUE
-    #> [1] TRUE TRUE TRUE TRUE
+### Troubleshooting
+
+-   **Can’t find ghostscript on windows**
+    1)  I would recommend executing R as administrator. That’s the
+        easier (unsafe) way.
+    2)  Open `cmd` and write `where gswin64c` or `where gswin32c`. One
+        of them should work. The path returned has to be used as
+        `gs_path` in functions:
+
+``` r
+pdf_merge(output_file = "All_pdfs.pdf", gs_path = "C:/Program Files/gs/gs9.56.1/bin/gswin64c.exe")
+```

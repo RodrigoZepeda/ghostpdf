@@ -152,7 +152,7 @@ enables compression and other memory-saving tricks:</p>
 <span class="co">#in this case there isn't much to gain because the pdf was small by itself</span>
 <span class="co">#in large pdfs this is useful</span>
 <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Shrank pdf from "</span>, <span class="va">original_size</span>, <span class="st">" to "</span>, <span class="va">reduced_size</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Shrank pdf from 29571 to 27388</span></code></pre></div>
+<span class="co">#&gt; Shrank pdf from 29661 to 27408</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="pdf-to-image">PDF to image<a class="anchor" aria-label="anchor" href="#pdf-to-image"></a>
@@ -201,11 +201,24 @@ formats: <code>png</code>, <code>tiff</code>, <code>jpeg</code>,
 </h3>
 <p>I would like to eventually add same functionality for eps files and
 to transform between images and image to pdf.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE TRUE TRUE TRUE</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE TRUE TRUE</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE TRUE TRUE TRUE</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
+</h3>
+<ul>
+<li>
+<strong>Can’t find ghostscript on windows</strong>
+<ol style="list-style-type: decimal">
+<li>I would recommend executing R as administrator. That’s the easier
+(unsafe) way.</li>
+<li>Open <code>cmd</code> and write <code>where gswin64c</code> or
+<code>where gswin32c</code>. One of them should work. The path returned
+has to be used as <code>gs_path</code> in functions:</li>
+</ol>
+</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/pdf_merge.html">pdf_merge</a></span><span class="op">(</span>output_file <span class="op">=</span> <span class="st">"All_pdfs.pdf"</span>, gs_path <span class="op">=</span> <span class="st">"C:/Program Files/gs/gs9.56.1/bin/gswin64c.exe"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 </div>
