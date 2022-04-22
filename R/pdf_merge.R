@@ -1,0 +1,114 @@
+#' PDF Combine
+#'
+#' @description Combine multiple pdf's in one unique file
+#' @details Needs Ghostscript installation to work
+#' @param pdf_files_to_paste vector with pdf files to combine in one unique pdf or
+#' a character indicating which pdf's (such as *.pdf)
+#' @param output_file name of the output pdf that combines all pdfs
+#' @param auto_rotate_pages automatically rotate pages when pasting (default = \code{"None"})
+#' @param pdf_settings Presets the "distiller parameters" to one of four predefined settings:
+#' "eBook" \code{"ebook"}, "Screen Optimized" \code{"screen"},
+#' "Print Optimized" \code{"printer"}, "Prepress Optimized" \code{"prepress"} or
+#' \code{"default"}
+#' @param preserve_annotations boolean flag to try and preserve annotations in the pdfs (default TRUE)
+#' @param detect_duplicate_images boolean that attempts to detect the same image file
+#' and keep only one version of the image to reduce pdf size.
+#' @param fast_web_view boolean that reorders the output PDF file to conform to the Adobe
+#' 'linearised' PDF specification
+#' @param max_inline_image_size Specifies the maximum size of an inline image, in bytes.
+#' For images larger than this size, pdfwrite will create an XObject instead of embedding the
+#' image into the context stream. The default value is 4000. Note that redundant inline images
+#' must be embedded each time they occur in the document, while multiple references can be made
+#' to a single XObject image. Therefore it may be advantageous to set a small or zero value if
+#' the source document is expected to contain multiple identical images, reducing the size of
+#' the generated PDF.
+#' @param gs_path path to Ghostscript installation
+#' @param quiet Don't output messages
+#' @param cleanup Delete the files after merge? Default is \code{F}
+#' @param additional_flags Additional string of bash flags to pass to ghostscript
+#' @importFrom glue glue
+#' @examples
+#' for (i in 1:9){
+#'   pdf(paste0("Example",i,".pdf"), width = 6, height = 4)
+#'   plot(rnorm(10), rnorm(10), main = paste("Example",i,".pdf"))
+#'   dev.off()
+#' }
+#'
+#' #Combine the pdf's
+#' pdf_merge(list.files(pattern = "Example.*\\.pdf"), output_file = "merge_1.pdf",
+#' cleanup = TRUE)
+#' file.remove("merge_1.pdf")
+#' @export
+
+pdf_merge <- function(pdf_files_to_paste = list.files(pattern = "\\.pdf"),
+                        output_file        = "output.pdf",
+                        auto_rotate_pages  = c("None","All","PageByPage"),
+                        pdf_settings       = c("default","ebook","screen","printer","prepress"),
+                        gs_path = NULL, quiet = TRUE, cleanup = FALSE,
+                        preserve_annotations = TRUE,
+                        detect_duplicate_images = FALSE,
+                        fast_web_view = FALSE,
+                        max_inline_image_size = NULL,
+                        additional_flags = c("-dAutoFilterColorImages=false",
+                                             "-dAutoFilterGrayImages=false",
+                                             "-dColorImageFilter=/FlateEncode",
+                                             "-dGrayImageFilter=/FlateEncode",
+                                             "-dDownsampleMonoImages=false",
+                                             "-dDownsampleGrayImages=false" )){
+
+  #Get ghostscript
+  if (is.null(gs_path)){
+    gs_path <- detect_ghostscript(quiet)["gs"]
+  }
+
+  if (quiet){
+    quiet_flag <- "-dQUIET"
+  } else {
+    quiet_flag <- ""
+  }
+
+  if (fast_web_view){
+    fast_web_view_flag <- glue::glue("-dFastWebView=true")
+  } else {
+    fast_web_view_flag <- glue::glue("-dFastWebView=false")
+  }
+
+  if (detect_duplicate_images){
+    detect_duplicate_images_flag <- glue::glue("-dDetectDuplicateImages=true")
+  } else {
+    detect_duplicate_images_flag <- glue::glue("-dDetectDuplicateImages=false")
+  }
+
+  if (preserve_annotations){
+    preserve_annotations_flag <- glue::glue("-dPreserveAnnots=true")
+  } else {
+    preserve_annotations_flag <- glue::glue("-dPreserveAnnots=false")
+  }
+
+  if (!is.null(max_inline_image_size)){
+    max_inline_image_size_flag <- glue::glue("-dMaxInlineImageSize={max_inline_image_size}")
+  } else {
+    max_inline_image_size_flag <- ""
+  }
+
+  system2(gs_path, args = c("-dNOPAUSE",
+                            glue::glue("{quiet_flag}"),
+                            "-sDEVICE=pdfwrite",
+                            detect_duplicate_images_flag,
+                            fast_web_view_flag,
+                            preserve_annotations_flag,
+                            max_inline_image_size_flag,
+                            glue::glue("-dAutoRotatePages=/{auto_rotate_pages[1]}"),
+                            glue::glue("-sOUTPUTFILE={output_file}"),
+                            glue::glue("-dPDFSETTINGS=/{pdf_settings[1]}"),
+                            "-dBATCH",
+                            paste(additional_flags, collapse = " "),
+          paste(pdf_files_to_paste, collapse = " ")))
+
+  if (cleanup){
+    file.remove(pdf_files_to_paste)
+  }
+
+  return(NULL)
+
+}

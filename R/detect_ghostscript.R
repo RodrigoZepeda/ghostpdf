@@ -39,17 +39,19 @@ detect_ghostscript <- function(quiet = F){
 
   #Check if no ghostscript found
   if (rlang::is_empty(gs_dir)){
+    gs_version <- NULL
     stop(paste("Ghostscript not found. Please install as following:",
                " > [Windows] go to https://www.ghostscript.com/releases/gsdnld.html",
                " > [OSX] brew install ghostscript",
                " > [Ubuntu/Debian] sudo apt-get install ghostscript",
-               " > [CentOS/Fedora] sudo yum -y install ghostscript",
+               " > [CentOS/Fedora] sudo yum install ghostscript",
                sep = "\n"))
   } else {
+    gs_version <- system2(gs_dir, "--version", stdout=TRUE)
     if (!quiet){
-      message(glue::glue("Ghostscript found in {gs_dir}"))
+      message(glue::glue("Ghostscript version {gs_version} found at {gs_dir}"))
     }
   }
 
-  return(gs_dir)
+  return(list("gs" = gs_dir, "version" = gs_version))
 }

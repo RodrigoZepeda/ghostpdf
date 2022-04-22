@@ -1,10 +1,10 @@
 #' ghostpdf: A package for combining multiple pdfs
 #'
-#' The ghostpdf package provides a high level interface for some of ghostscript's
-#' functions.
+#' Provides a high level interface for some of ghostscript's functions allowing the user to
+#' convert between file formats, combine multiple pdfs and eps, etc
 #'
 #' @section ghostpdf functions:
-#' paste_pdfs
+#' pdf_combine
 #'
 #' @docType package
 #' @name ghostpdf

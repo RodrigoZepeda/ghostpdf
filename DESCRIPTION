@@ -1,14 +1,13 @@
 Package: ghostpdf
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: MIT + file LICENSE
+Title: Ghostscript in R
+Version: 0.0.1.0
+Authors@R: 
+    person("Rodrigo", "Zepeda", , "rodrigo.zepeda@imss.gob.mx", role = c("aut", "cre"))
+Description: Merges, encrypts, decrypts, shrinks, and transforms into images pdf files. 
+License: AGPL (>= 3)
 Encoding: UTF-8
-LazyData: true
+Language: en
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     glue,
