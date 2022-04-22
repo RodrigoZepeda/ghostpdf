@@ -152,7 +152,8 @@ I would like to eventually add same functionality for eps files and to transform
 ### Troubleshooting
 
 + **Can't find ghostscript on windows**
-Open `cmd` and write `where gswin64c` or `where gswin32c`. One of them should work. The path returned has to be used as `gs_path` in functions:
+  1) I would recommend executing R as administrator. That's the easier (unsafe) way. 
+  2) Open `cmd` and write `where gswin64c` or `where gswin32c`. One of them should work. The path returned has to be used as `gs_path` in functions:
 
 ```{r, eval = FALSE}
 pdf_merge(output_file = "All_pdfs.pdf", gs_path = "C:/Program Files/gs/gs9.56.1/bin/gswin64c.exe")
