@@ -149,9 +149,17 @@ pdf_decrypt("Example1.pdf", password = "mypassword")
 
 I would like to eventually add same functionality for eps files and to transform between images and image to pdf. 
 
+### Troubleshooting
+
++ **Can't find ghostscript on windows**
+Open `cmd` and write `where gswin64c` or `where gswin32c`. One of them should work. The path returned has to be used as `gs_path` in functions:
+
+```{r, eval = FALSE}
+pdf_merge(output_file = "All_pdfs.pdf", gs_path = "C:/Program Files/gs/gs9.56.1/bin/gswin64c.exe")
+```
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, results = 'hide'}
 list.files(pattern = "Example") |> file.remove()
 list.files(pattern = ".*.png") |> file.remove()
 list.files(pattern = ".*.pdf") |> file.remove()
