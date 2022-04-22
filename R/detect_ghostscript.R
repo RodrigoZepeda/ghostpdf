@@ -16,8 +16,8 @@ detect_ghostscript <- function(quiet = F){
   } else {
 
     #In windows two possible ghostscript versions
-    gs_dir_32 <- system2("which", "gswin32c", stdout=TRUE)
-    gs_dir_64 <- system2("which", "gswin64c", stdout=TRUE)
+    gs_dir_32 <- system2("where", "gswin32c", stdout=TRUE)
+    gs_dir_64 <- system2("where", "gswin64c", stdout=TRUE)
 
     #Version 64
     if (rlang::is_empty(gs_dir_32) & !rlang::is_empty(gs_dir_64)){
